@@ -1,0 +1,56 @@
+-- Default walk speed
+local defaultWalkSpeed = 16
+local speedChangeAmountUp = 6 -- Amount to increase the speed by
+local speedChangeAmountDown = 4 -- Amount to decrease the speed by
+local maxWalkSpeed = 2000 -- Maximum walk speed limit
+
+-- Create a ScreenGui to hold the GUI elements
+local gui = Instance.new("ScreenGui")
+gui.Parent = game.Players.LocalPlayer.PlayerGui
+
+-- Create a Frame to hold the buttons
+local frame = Instance.new("Frame")
+frame.Size = UDim2.new(0, 200, 0, 100)  -- Set the size of the frame
+frame.Position = UDim2.new(0.5, -100, 0.5, -50) -- Center the frame on the screen
+frame.BackgroundTransparency = 0.5 -- Make the frame semi-transparent
+frame.BackgroundColor3 = Color3.new(0, 0, 0) -- Set background color to black
+frame.Active = true -- Make the frame active to detect mouse input
+frame.Draggable = true -- Make the frame draggable
+frame.Parent = gui
+
+-- Create the "Speed Up" button
+local speedUpButton = Instance.new("TextButton")
+speedUpButton.Size = UDim2.new(0, 100, 0, 50) -- Set the size of the button
+speedUpButton.Position = UDim2.new(0, 10, 0.5, -25) -- Position the button
+speedUpButton.Text = "Speed Up" -- Set the text of the button
+speedUpButton.Parent = frame
+
+-- Create the "Speed Down" button
+local speedDownButton = Instance.new("TextButton")
+speedDownButton.Size = UDim2.new(0, 100, 0, 50) -- Set the size of the button
+speedDownButton.Position = UDim2.new(1, -110, 0.5, -25) -- Position the button
+speedDownButton.Text = "Speed Down" -- Set the text of the button
+speedDownButton.Parent = frame
+
+-- Function to adjust the player's walk speed
+local function adjustWalkSpeed(amount)
+    local humanoid = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+    if humanoid then
+        local newSpeed = humanoid.WalkSpeed + amount
+        humanoid.WalkSpeed = math.clamp(newSpeed, 1, maxWalkSpeed) -- Cap at 1 to maxWalkSpeed units
+    end
+end
+
+-- Function to increase the player's walk speed
+local function speedUp()
+    adjustWalkSpeed(speedChangeAmountUp)
+end
+
+-- Function to decrease the player's walk speed
+local function speedDown()
+    adjustWalkSpeed(-speedChangeAmountDown)
+end
+
+-- Connect the functions to the button click events
+speedUpButton.MouseButton1Click:Connect(speedUp)
+speedDownButton.MouseButton1Click:Connect(speedDown)
